@@ -53,7 +53,7 @@ public class ThemeTest {
     public void testGetId_theme() {
         System.out.println("getId_theme");
         Theme instance = new Theme();
-        int expResult = 0;
+        int expResult = -1;
         int result = instance.getId_theme();
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
