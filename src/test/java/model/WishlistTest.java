@@ -114,11 +114,11 @@ public class WishlistTest {
     @Test
     public void testSetTheme() {
         System.out.println("setTheme");
-        Theme theme = null;
+       Theme theme = new Theme();
         Wishlist instance = new Wishlist();
         instance.setTheme(theme);
         // TODO review the generated test code and remove the default call to fail.
-        
+        assertNotNull(theme); 
     }
 
     /**
@@ -127,11 +127,12 @@ public class WishlistTest {
     @Test
     public void testGetProducts() {
         System.out.println("getProducts");
+        ArrayList<Product> products = new ArrayList<Product>(); 
         Wishlist instance = new Wishlist();
-        ArrayList<Product> expResult = null;
         ArrayList<Product> result = instance.getProducts();
-        assertEquals(expResult, result);
+        assertNotNull(products);
         // TODO review the generated test code and remove the default call to fail.
+        
         
     }
 
@@ -141,11 +142,11 @@ public class WishlistTest {
     @Test
     public void testSetProducts() {
         System.out.println("setProducts");
-        ArrayList<Product> products = null;
+        ArrayList<Product> products = new ArrayList<Product>(); 
         Wishlist instance = new Wishlist();
         instance.setProducts(products);
         // TODO review the generated test code and remove the default call to fail.
-        
+        assertNotNull(products);
     }
     
 }
