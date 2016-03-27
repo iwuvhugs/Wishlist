@@ -8,40 +8,34 @@ package model;
 import java.util.ArrayList;
 import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Test;
-import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  *
- * @author iwuvhugs
+ * @author Akpohere
  */
 public class WishlistTest {
-
+    
     public WishlistTest() {
     }
-
+    
     @BeforeClass
-    public static void setUpClass() throws Exception {
+    public static void setUpClass() {
     }
-
+    
     @AfterClass
-    public static void tearDownClass() throws Exception {
+    public static void tearDownClass() {
     }
-
+    
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
     }
-
+    
     @After
-    public void tearDown() throws Exception {
-    }
-
-    @Test
-    public void testSomeMethod() {
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    public void tearDown() {
     }
 
     /**
@@ -51,11 +45,11 @@ public class WishlistTest {
     public void testGetId_wishlist() {
         System.out.println("getId_wishlist");
         Wishlist instance = new Wishlist();
-        int expResult = 0;
+        int expResult = -1;
         int result = instance.getId_wishlist();
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        
     }
 
     /**
@@ -64,11 +58,13 @@ public class WishlistTest {
     @Test
     public void testSetId_wishlist() {
         System.out.println("setId_wishlist");
-        int id_wishlist = 0;
+        int id_wishlist = -1;
         Wishlist instance = new Wishlist();
-        instance.setId_wishlist(id_wishlist);
+       instance.setId_wishlist(id_wishlist);
         // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        int expResult = -1;
+        int result = instance.getId_wishlist();
+         assertEquals(expResult, result);
     }
 
     /**
@@ -77,12 +73,12 @@ public class WishlistTest {
     @Test
     public void testGetUser() {
         System.out.println("getUser");
+        User user = new User();
         Wishlist instance = new Wishlist();
-        User expResult = null;
-        User result = instance.getUser();
-        assertEquals(expResult, result);
+        instance.getUser();
+        assertNotNull(user);
         // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        
     }
 
     /**
@@ -91,11 +87,11 @@ public class WishlistTest {
     @Test
     public void testSetUser() {
         System.out.println("setUser");
-        User user = null;
+        User user = new User();
         Wishlist instance = new Wishlist();
         instance.setUser(user);
         // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+       assertNotNull(user);
     }
 
     /**
@@ -104,12 +100,12 @@ public class WishlistTest {
     @Test
     public void testGetTheme() {
         System.out.println("getTheme");
+        Theme theme = new Theme();
         Wishlist instance = new Wishlist();
-        Theme expResult = null;
-        Theme result = instance.getTheme();
-        assertEquals(expResult, result);
+         instance.getTheme();
+        assertNotNull(theme);
         // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        
     }
 
     /**
@@ -122,7 +118,7 @@ public class WishlistTest {
         Wishlist instance = new Wishlist();
         instance.setTheme(theme);
         // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        
     }
 
     /**
@@ -136,7 +132,7 @@ public class WishlistTest {
         ArrayList<Product> result = instance.getProducts();
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        
     }
 
     /**
@@ -149,7 +145,7 @@ public class WishlistTest {
         Wishlist instance = new Wishlist();
         instance.setProducts(products);
         // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        
     }
-
+    
 }
