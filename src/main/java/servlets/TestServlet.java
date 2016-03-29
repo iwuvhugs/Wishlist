@@ -25,9 +25,15 @@ import utils.DBUtil;
  *
  * @author iwuvhugs
  */
+
 @WebServlet("/test")
 public class TestServlet extends HttpServlet {
-
+/**
+ * 
+ * @param request
+ * @param response
+ * @throws IOException 
+ */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
