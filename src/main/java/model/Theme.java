@@ -12,6 +12,23 @@ package model;
 public class Theme {
     private int id_theme;
     private String title;
+    
+    /**
+ * constructor to set no arg default
+ */
+    public Theme() {
+       id_theme = -1;
+       title = "default";
+    }
+/**
+ * 
+ * @param id_theme
+ * @param title 
+ */
+    public Theme(int id_theme, String title) {
+        this.id_theme = id_theme;
+        this.title = title;
+    }
 /**
  * 
  * @return 
@@ -40,22 +57,7 @@ public class Theme {
     public void setTitle(String title) {
         this.title = title;
     }
-/**
- * 
- */
-    public Theme() {
-       id_theme = -1;
-       title = "default";
-    }
-/**
- * 
- * @param id_theme
- * @param title 
- */
-    public Theme(int id_theme, String title) {
-        this.id_theme = id_theme;
-        this.title = title;
-    }
+
 /**
  * 
  * @return 

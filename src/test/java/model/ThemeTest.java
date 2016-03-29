@@ -103,6 +103,19 @@ public class ThemeTest {
         fail("could not get title");
     }
 
+      /**
+     * Test of getTitle method, of class Theme.
+     */
+    @Test
+    public void testGetbobTitle() {
+        System.out.println("getTitle");
+        Theme instance = new Theme(1,"bob");
+        String expResult = "bob";
+        String result = instance.getTitle();
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("could not get title");
+    }
     /**
      * Test of setTitle method, of class Theme.
      */
