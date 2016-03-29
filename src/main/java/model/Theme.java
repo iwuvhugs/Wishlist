@@ -18,6 +18,7 @@ public class Theme {
  */
     public Theme() {
        id_theme = -1;
+       
        title = "default";
     }
 /**
@@ -26,9 +27,15 @@ public class Theme {
  * @param title 
  */
     public Theme(int id_theme, String title) {
-        this.id_theme = id_theme;
-        this.title = title;
+       this.id_theme = id_theme;
+        
+        if (title.equals("") || title == null){
+        this.title = "default";
     }
+        else{
+         
+      this.title = title;  
+    }}
 /**
  * 
  * @return 

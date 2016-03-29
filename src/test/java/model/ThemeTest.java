@@ -125,6 +125,19 @@ public class ThemeTest {
         String title = "";
         Theme instance = new Theme();
         instance.setTitle(title);
+        String expResult = "";
+        String result = instance.getTitle();
+         assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+  
+    }
+    
+      @Test
+    public void testSetnullTitle() {
+        System.out.println("setTitle");
+       
+        Theme instance = new Theme();
+        
         String expResult = "default";
         String result = instance.getTitle();
          assertEquals(expResult, result);
