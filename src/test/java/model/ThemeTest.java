@@ -73,7 +73,7 @@ public class ThemeTest {
         int result = instance.getId_theme();
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
-        fail("could not get theme_id");
+    
     }
 
     /**
@@ -86,7 +86,7 @@ public class ThemeTest {
         Theme instance = new Theme();
         instance.setId_theme(id_theme);
         // TODO review the generated test code and remove the default call to fail.
-        fail("could not set id.");
+      
     }
 
     /**
@@ -100,7 +100,7 @@ public class ThemeTest {
         String result = instance.getTitle();
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
-        fail("could not get title");
+   
     }
 
       /**
@@ -114,7 +114,7 @@ public class ThemeTest {
         String result = instance.getTitle();
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
-        fail("could not get title");
+      
     }
     /**
      * Test of setTitle method, of class Theme.
@@ -125,8 +125,11 @@ public class ThemeTest {
         String title = "";
         Theme instance = new Theme();
         instance.setTitle(title);
+        String expResult = "default";
+        String result = instance.getTitle();
+         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
-        fail("could not set title");
+  
     }
 
     /**
@@ -140,7 +143,7 @@ public class ThemeTest {
         String result = instance.toString();
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
-        fail("toString fail to work");
+        
     }
     
 
