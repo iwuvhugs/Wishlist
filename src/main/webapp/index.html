@@ -15,6 +15,7 @@ and open the template in the editor.
               type="text/css"
               integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" 
               crossorigin="anonymous">
+        <link href="styles/styles.css" rel="stylesheet" type="text/css">
 
         <script src="http://code.jquery.com/jquery-2.1.4.min.js">
         </script>
@@ -27,19 +28,27 @@ and open the template in the editor.
         <script>
             $(document).ready(function () {
                 $.get('/Wishlist/v1/wishlists', function (data) {
-
+                    console.log(data);
                     var container = $('#wishlists');
                     $.each(data, function (key, object) {
-                        console.log(object);
+
                         var wWrapper = $('<div class="col-sm-4"></div>');
                         var wItem = $('<div class="panel panel-default"></div>');
                         var wHeader = $('<div class="panel-heading"></div>');
-                        var wBody = $('<div class="panel-body"></div>');
+                        var wBody = $('<ul class="list-group"></ul>');
                         var wFooter = $('<div class="panel-footer"></div>');
 
-                        wHeader.html(object.name);
-                        wFooter.html(object.theme);
-                        
+                        wHeader.html('user: <b><a href="user.html?id=' + object.id_user + '">' + object.name + '</a></b>');
+                        wFooter.html('theme: <i>' + object.theme + '</i>');
+
+                        $.each(object.products, function (kp, product) {
+                            var pWrapper = $('<li class="list-group-item"></li>');
+
+                            pWrapper.html(product.product_name);
+
+                            wBody.append(pWrapper);
+                        });
+
                         wItem.append(wHeader);
                         wItem.append(wBody);
                         wItem.append(wFooter);
@@ -59,7 +68,7 @@ and open the template in the editor.
     <body>
         <div class="container">
             <div class="page-header">
-                <h1>Wishlist</h1>
+                <h1 class="text-center">Wishlist</h1>
             </div>
             <div class="row" id="wishlists">
 
@@ -68,6 +77,8 @@ and open the template in the editor.
 
 
 
-
+        <footer>
+            <p class="text-center">Made by <a href="https://github.com/iwuvhugs/Wishlist">j-Project team</a> &copy; 2016</p>
+        </footer>    
     </body>
 </html>
