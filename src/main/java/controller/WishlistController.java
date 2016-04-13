@@ -94,4 +94,69 @@ public class WishlistController {
         JsonObject object = builder.build();
         return object;
     }
+
+    public JsonObject getUserWishlists(int id) {
+        JsonObjectBuilder builder = Json.createObjectBuilder();
+
+        Connection conn;
+        try {
+            conn = DBUtil.getConnection();
+            PreparedStatement stmt = conn.prepareStatement("SELECT id_wishlist, USER.id_user, first_name, title "
+                    + "FROM WISHLIST "
+                    + "JOIN USER ON WISHLIST.id_user = USER.id_user "
+                    + "JOIN THEME ON WISHLIST.id_theme = THEME.id_theme WHERE USER.id_user = ?");
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+
+            JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
+            while (rs.next()) {
+                JsonObjectBuilder innerBuilder = Json.createObjectBuilder();
+                int wishlist_id = rs.getInt("id_wishlist");
+                innerBuilder.add("id", wishlist_id);
+                innerBuilder.add("id_user", rs.getInt("USER.id_user"));
+                innerBuilder.add("name", rs.getString("first_name"));
+                innerBuilder.add("theme", rs.getString("title"));
+
+                PreparedStatement pStmt = conn.prepareStatement(
+                        "SELECT PRODUCT_LIST.id_product, "
+                        + "PRODUCT.product_name, "
+                        + "PRODUCT.description, "
+                        + "PRODUCT.price, "
+                        + "PRODUCT.link, "
+                        + "PRODUCT_LIST.reserved, "
+                        + "PRODUCT_LIST.purchased "
+                        + "FROM PRODUCT_LIST JOIN PRODUCT "
+                        + "ON PRODUCT_LIST.id_product = PRODUCT.id_product "
+                        + "WHERE PRODUCT_LIST.id_wishlist = ?;");
+                pStmt.setInt(1, wishlist_id);
+                ResultSet pRs = pStmt.executeQuery();
+                JsonArrayBuilder prodArrayBuilder = Json.createArrayBuilder();
+                while (pRs.next()) {
+                    JsonObjectBuilder productBuilder = Json.createObjectBuilder();
+
+                    productBuilder.add("id_product", pRs.getInt("PRODUCT_LIST.id_product"));
+                    productBuilder.add("product_name", pRs.getString("PRODUCT.product_name"));
+                    productBuilder.add("description", pRs.getString("PRODUCT.description"));
+                    productBuilder.add("price", pRs.getDouble("PRODUCT.price"));
+                    productBuilder.add("link", pRs.getString("PRODUCT.link"));
+                    productBuilder.add("reserved", pRs.getBoolean("PRODUCT_LIST.reserved"));
+                    productBuilder.add("purchased", pRs.getInt("PRODUCT_LIST.purchased"));
+
+                    prodArrayBuilder.add(productBuilder);
+                }
+                innerBuilder.add("products", prodArrayBuilder);
+
+                arrayBuilder.add(innerBuilder);
+            }
+
+            builder.add("success", true);
+            builder.add("data", arrayBuilder.build().toString());
+        } catch (SQLException ex) {
+            Logger.getLogger(WishlistController.class.getName()).log(Level.SEVERE, null, ex);
+            builder.add("success", false);
+
+        }
+        JsonObject object = builder.build();
+        return object;
+    }
 }

@@ -6,11 +6,90 @@ and open the template in the editor.
 -->
 <html>
     <head>
-        <title>TODO supply a title</title>
+        <title>User page</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" 
+              rel="stylesheet" 
+              type="text/css"
+              integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" 
+              crossorigin="anonymous">
+        <link href="styles/styles.css" rel="stylesheet" type="text/css">
+
+        <script src="http://code.jquery.com/jquery-2.1.4.min.js">
+        </script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" 
+                integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" 
+                crossorigin="anonymous">
+        </script>
+
+
+        <script>
+            $(document).ready(function () {
+
+                var uri = window.location.search;
+                var params = uri.substring(1, uri.length).split("=");
+                if (params[0] === "id") {
+
+                    $.getJSON('v1/users/' + params[1], function (data) {
+                        console.log(data.data);
+                        var container = $('#username');
+                        container.html("Hey " + data.data.first_name);
+                    });
+
+                    $.getJSON('v1/wishlists/' + params[1], function (data) {
+                        console.log(data);
+                        var container = $('#wishlists');
+                        $.each(data, function (key, object) {
+
+                            var wWrapper = $('<div class="col-sm-4"></div>');
+                            var wItem = $('<div class="panel panel-default"></div>');
+                            var wHeader = $('<div class="panel-heading"></div>');
+                            var wBody = $('<ul class="list-group"></ul>');
+                            var wFooter = $('<div class="panel-footer"></div>');
+
+                            wHeader.html('wishlist: <b><a href="wishlist.html?id=' + object.id + '">#' + object.id + '</a></b>');
+                            wFooter.html('theme: <i>' + object.theme + '</i>');
+
+                            $.each(object.products, function (kp, product) {
+                                var pWrapper = $('<li class="list-group-item"></li>');
+
+                                pWrapper.html(product.product_name);
+
+                                wBody.append(pWrapper);
+                            });
+
+                            wItem.append(wHeader);
+                            wItem.append(wBody);
+                            wItem.append(wFooter);
+
+                            wWrapper.append(wItem);
+
+                            container.append(wWrapper);
+                        });
+                    });
+                }
+            });
+        </script>
+
+
     </head>
     <body>
-        <div>TODO write content</div>
+        <div class="container">
+            <div class="page-header">
+                <h1 class="text-center" id="username"></h1>
+            </div>
+
+            <div class="row" id="wishlists">
+
+            </div>
+        </div>
+
+
+
+        <footer>
+            <p class="text-center">Made by <a href="https://github.com/iwuvhugs/Wishlist">j-Project team</a> &copy; 2016</p>
+        </footer>   
     </body>
 </html>
