@@ -31,7 +31,7 @@ public class WishlistsService {
     public Response getAll() {
         JsonObject object = controller.getAllWishlists();
         if (object.getBoolean("success")) {
-            return Response.ok(object.getString("data").toString()).build();
+            return Response.ok(object.getString("data")).build();
         } else {
             return Response.status(404).entity("Error").build();
         }
@@ -43,7 +43,7 @@ public class WishlistsService {
     public Response getByUserId(@PathParam("id") int id) {
         JsonObject object = controller.getUserWishlists(id);
         if (object.getBoolean("success")) {
-            return Response.ok(object.getString("data").toString()).build();
+            return Response.ok(object.getString("data")).build();
         } else {
             return Response.status(404).entity("Error").build();
         }
