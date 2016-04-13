@@ -43,7 +43,7 @@ public class DBUtil {
             try {
                 String host = System.getenv("OPENSHIFT_MYSQL_DB_HOST");
                 String port = System.getenv("OPENSHIFT_MYSQL_DB_PORT");
-                String name = "sample";
+                String name = "wishlist";
                 String url = "jdbc:mysql://" + host + ":" + port + "/" + name;
                 String username = System.getenv("OPENSHIFT_MYSQL_DB_USERNAME");
                 String password = System.getenv("OPENSHIFT_MYSQL_DB_PASSWORD");
