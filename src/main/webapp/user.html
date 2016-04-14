@@ -19,55 +19,103 @@ and open the template in the editor.
 
         <script src="http://code.jquery.com/jquery-2.1.4.min.js">
         </script>
+
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" 
                 integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" 
                 crossorigin="anonymous">
         </script>
 
-
         <script>
             $(document).ready(function () {
 
                 var uri = window.location.search;
+                var theme_id;
                 var params = uri.substring(1, uri.length).split("=");
                 if (params[0] === "id") {
 
                     $.getJSON('v1/users/' + params[1], function (data) {
-                        console.log(data.data);
+//                        console.log(data.data);
                         var container = $('#username');
                         container.html("Hey " + data.data.first_name);
                     });
 
-                    $.getJSON('v1/wishlists/' + params[1], function (data) {
-                        console.log(data);
-                        var container = $('#wishlists');
-                        $.each(data, function (key, object) {
+                    function updateWishlists(data) {
+                        $.getJSON('v1/wishlists/' + params[1], function (data) {
+//                        console.log(data);
+                            var container = $('#wishlists');
+                            container.empty();
+                            $.each(data, function (key, object) {
 
-                            var wWrapper = $('<div class="col-sm-4"></div>');
-                            var wItem = $('<div class="panel panel-default"></div>');
-                            var wHeader = $('<div class="panel-heading"></div>');
-                            var wBody = $('<ul class="list-group"></ul>');
-                            var wFooter = $('<div class="panel-footer"></div>');
+                                var wWrapper = $('<div class="clearfix col-sm-4"></div>');
+                                var wItem = $('<div class="panel panel-default"></div>');
+                                var wHeader = $('<div class="panel-heading"></div>');
+                                var wBody = $('<ul class="list-group"></ul>');
+                                var wFooter = $('<div class="panel-footer"></div>');
 
-                            wHeader.html('wishlist: <b><a href="wishlist.html?id=' + object.id + '">#' + object.id + '</a></b>');
-                            wFooter.html('theme: <i>' + object.theme + '</i>');
+                                wHeader.html('wishlist: \
+                                    <b><a href="wishlist.html?id=' + object.id + '">#' + object.id + '</a></b>\
+                                    <a class="delete_btn">&#10005;</a>');
+                                wFooter.html('theme: <i>' + object.theme + '</i>');
 
-                            $.each(object.products, function (kp, product) {
-                                var pWrapper = $('<li class="list-group-item"></li>');
+                                $.each(object.products, function (kp, product) {
+                                    var pWrapper = $('<li class="list-group-item"></li>');
 
-                                pWrapper.html(product.product_name);
+                                    pWrapper.html(product.product_name);
 
-                                wBody.append(pWrapper);
+                                    wBody.append(pWrapper);
+                                });
+
+                                wItem.append(wHeader);
+                                wItem.append(wBody);
+                                wItem.append(wFooter);
+
+                                wWrapper.append(wItem);
+
+                                container.append(wWrapper);
                             });
-
-                            wItem.append(wHeader);
-                            wItem.append(wBody);
-                            wItem.append(wFooter);
-
-                            wWrapper.append(wItem);
-
-                            container.append(wWrapper);
                         });
+                    }
+
+
+                    updateWishlists();
+
+                    $.getJSON('v1/themes', function (data) {
+                        var container = $('#sel1');
+                        $.each(data, function (key, object) {
+                            var option = $('<option value="' + object.id_theme + '"></option>');
+                            option.html(object.title);
+                            container.append(option);
+                        });
+                        theme_id = $("#sel1 option:selected").val();
+                    });
+
+                    $("#sel1").change(function () {
+                        theme_id = $("#sel1 option:selected").val();
+                    });
+
+                    $('#create').click(function () {
+                        console.log(theme_id + " " + params[1]);
+                        var new_theme = {
+                            "id_theme": theme_id,
+                            "id_user": params[1]
+                        };
+                        console.log(new_theme);
+                        var new_theme_json = JSON.stringify(new_theme);
+
+                        jQuery.ajax(
+                                {
+                                    url: "v1/wishlists",
+                                    type: 'POST',
+                                    dataType: "json",
+                                    contentType: "application/json",
+                                    data: new_theme_json,
+                                    success: function (data) {
+                                        updateWishlists();
+                                    },
+                                    error: function () {
+                                    }
+                                }
+                        );
                     });
                 }
             });
@@ -86,8 +134,19 @@ and open the template in the editor.
             </div>
 
             <div class="row">
+                <hr>
+            </div>
+
+            <div class="row">
                 <div class="col-xs-4 col-xs-offset-4 text-center">
-                    <button type="button" class="btn btn-default">Create new wishlist</button>
+                    <div class="form-group">
+                        <label for="sel1">Select theme:</label>
+                        <select class="form-control" name="sel1" id="sel1">
+                        </select>
+                    </div>
+                    <div>
+                        <button id="create" type="button" class="btn btn-default  btn-block">Create a new wishlist</button>
+                    </div>
                 </div>
 
             </div>

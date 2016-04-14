@@ -6,10 +6,14 @@
 package services;
 
 import controller.WishlistController;
+import java.io.StringReader;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.json.Json;
 import javax.json.JsonObject;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -47,6 +51,31 @@ public class WishlistsService {
         } else {
             return Response.status(404).entity("Error").build();
         }
+    }
+
+    /**
+     *
+     * @param str
+     * @return JSON array of all messages
+     */
+    @POST
+    @Consumes("application/json")
+    @Produces("application/json")
+    public Response add(String str) {
+//        System.out.println(str);
+        JsonObject json = Json.createReader(new StringReader(str)).readObject();
+//        System.out.println(json.toString());
+        int theme_id = Integer.parseInt(json.getString("id_theme"));
+        int user_id = Integer.parseInt(json.getString("id_user"));
+//        System.out.println(theme_id + " " + user_id);
+        JsonObject object = controller.addNewWishlist(theme_id, user_id);
+        if (object.getBoolean("success")) {
+            return Response.ok(object).build();
+        } else {
+            return Response.status(404).entity("Error by Kirill").build();
+//        return Response.ok("{ok:ok}").build();
+        }
+
     }
 
 }

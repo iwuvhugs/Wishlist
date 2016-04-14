@@ -19,3 +19,21 @@ footer {
 footer p {
     margin-top: 40px;
 }
+
+.container {
+    margin-bottom:  140px; 
+}
+
+.btn {
+    white-space: normal;
+}
+
+.delete_btn {
+    float: right;
+    color: #888;
+    text-decoration: none;
+}
+.delete_btn:hover {
+    color: #000;
+    text-decoration: none;
+}

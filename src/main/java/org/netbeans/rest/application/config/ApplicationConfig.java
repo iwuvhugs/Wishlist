@@ -28,6 +28,7 @@ public class ApplicationConfig extends Application {
      * out calling this method in getClasses().
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
+        resources.add(services.ThemeService.class);
         resources.add(services.UserService.class);
         resources.add(services.WishlistsService.class);
     }

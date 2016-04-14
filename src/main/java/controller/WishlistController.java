@@ -159,4 +159,27 @@ public class WishlistController {
         JsonObject object = builder.build();
         return object;
     }
+
+    public JsonObject addNewWishlist(int theme_id, int user_id) {
+
+        JsonObjectBuilder builder = Json.createObjectBuilder();
+
+        Connection conn;
+        try {
+            conn = DBUtil.getConnection();
+            PreparedStatement stmt = conn.prepareStatement("INSERT INTO WISHLIST (id_user, id_theme) VALUES ( ? , ? )");
+            stmt.setInt(1, user_id);
+            stmt.setInt(2, theme_id);
+            stmt.executeUpdate();
+
+            builder.add("success", true);
+        } catch (SQLException ex) {
+            Logger.getLogger(WishlistController.class.getName()).log(Level.SEVERE, null, ex);
+            builder.add("success", false);
+
+        }
+        JsonObject object = builder.build();
+        return object;
+
+    }
 }
