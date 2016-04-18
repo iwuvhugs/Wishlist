@@ -26,11 +26,16 @@ and open the template in the editor.
         </script>
 
         <script>
+            var updateWishlists;
+            
             $(document).ready(function () {
 
                 var uri = window.location.search;
                 var theme_id;
                 var params = uri.substring(1, uri.length).split("=");
+
+
+
                 if (params[0] === "id") {
 
                     $.getJSON('v1/users/' + params[1], function (data) {
@@ -39,7 +44,7 @@ and open the template in the editor.
                         container.html("Hey " + data.data.first_name);
                     });
 
-                    function updateWishlists(data) {
+                    updateWishlists = function(data) {
                         $.getJSON('v1/wishlists/' + params[1], function (data) {
 //                        console.log(data);
                             var container = $('#wishlists');
@@ -54,7 +59,7 @@ and open the template in the editor.
 
                                 wHeader.html('wishlist: \
                                     <b><a href="wishlist.html?id=' + object.id + '">#' + object.id + '</a></b>\
-                                    <a class="delete_btn">&#10005;</a>');
+                                    <span class="delete_btn" onClick="delItem(' + object.id + ')">&#10005;</span>');
                                 wFooter.html('theme: <i>' + object.theme + '</i>');
 
                                 $.each(object.products, function (kp, product) {
@@ -74,6 +79,8 @@ and open the template in the editor.
                                 container.append(wWrapper);
                             });
                         });
+
+
                     }
 
 
@@ -119,6 +126,19 @@ and open the template in the editor.
                     });
                 }
             });
+
+            function delItem(id) {
+//                alert(id);
+                $.ajax({
+                    url: 'v1/wishlists/' + id,
+                    type: 'DELETE',
+                    success: function (result) {
+//                        alert("DELETED " + result);
+                        updateWishlists();
+                    }
+                });
+            }
+
         </script>
 
 

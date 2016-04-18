@@ -182,4 +182,20 @@ public class WishlistController {
         return object;
 
     }
+
+    public boolean deleteWishlist(int id) {
+        Connection conn;
+        try {
+            conn = DBUtil.getConnection();
+            PreparedStatement stmt = conn.prepareStatement("DELETE FROM WISHLIST WHERE id_wishlist = ?");
+            stmt.setInt(1, id);
+            stmt.executeUpdate();
+
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(WishlistController.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+
+        }
+    }
 }
