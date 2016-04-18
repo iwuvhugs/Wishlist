@@ -198,4 +198,53 @@ public class WishlistController {
 
         }
     }
+
+    public JsonObject getWishlistProducts(int id) {
+
+        JsonObjectBuilder builder = Json.createObjectBuilder();
+        Connection conn;
+        try {
+            conn = DBUtil.getConnection();
+            PreparedStatement stmt = conn.prepareStatement("SELECT "
+                    + "	PRODUCT_LIST.id_wishlist, "
+                    + "    PRODUCT_LIST.id_product, "
+                    + "    PRODUCT.product_name, "
+                    + "    PRODUCT.description, "
+                    + "    PRODUCT.price, "
+                    + "    PRODUCT.link, "
+                    + "    PRODUCT_LIST.reserved, "
+                    + "    PRODUCT_LIST.purchased "
+                    + "FROM PRODUCT_LIST JOIN PRODUCT  "
+                    + "	ON PRODUCT_LIST.id_product = PRODUCT.id_product "
+                    + "     WHERE PRODUCT_LIST.id_wishlist = ?");
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+
+            JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
+            while (rs.next()) {
+                JsonObjectBuilder innerBuilder = Json.createObjectBuilder();
+
+                innerBuilder.add("id_wishlist", rs.getInt(1));
+                innerBuilder.add("id_product", rs.getInt(2));
+                innerBuilder.add("product_name", rs.getString(3));
+                innerBuilder.add("description", rs.getString(4));
+                innerBuilder.add("price", rs.getString(5));
+                innerBuilder.add("link", rs.getString(6));
+                innerBuilder.add("reserved", rs.getString(7));
+                innerBuilder.add("purchased", rs.getString(8));
+
+                arrayBuilder.add(innerBuilder);
+            }
+
+            builder.add("success", true);
+            builder.add("data", arrayBuilder.build().toString());
+        } catch (SQLException ex) {
+            Logger.getLogger(WishlistController.class.getName()).log(Level.SEVERE, null, ex);
+            builder.add("success", false);
+
+        }
+        JsonObject object = builder.build();
+        return object;
+
+    }
 }

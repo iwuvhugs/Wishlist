@@ -23,14 +23,39 @@ and open the template in the editor.
                 integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" 
                 crossorigin="anonymous">
         </script>
+        <script>
+            $(document).ready(function () {
+
+                var uri = window.location.search;
+                var theme_id;
+                var params = uri.substring(1, uri.length).split("=");
+
+                if (params[0] === "id") {
+                    
+                    var container = $('#wishlist');
+                    container.html("Wishlist #" + params[1]);
+
+                    $.getJSON('v1/products/' + params[1], function (out) {
+                        console.log(out);
+                    });
+
+                }
+            });
+        </script>
     </head>
     <body>
         <div class="container">
             <div class="page-header">
                 <h1 class="text-center" id="wishlist"></h1>
             </div>
-            <div class="row" id="items">
-
+            <div class="row col-xs-6 col-xs-offset-3" id="items">
+                <ul class="list-group">
+                    <li class="list-group-item">Cras justo odio</li>
+                    <li class="list-group-item">Dapibus ac facilisis in</li>
+                    <li class="list-group-item">Morbi leo risus</li>
+                    <li class="list-group-item">Porta ac consectetur ac</li>
+                    <li class="list-group-item">Vestibulum at eros</li>
+                </ul>
             </div>
         </div>
 
