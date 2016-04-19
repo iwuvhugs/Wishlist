@@ -27,7 +27,7 @@ and open the template in the editor.
 
         <script>
             var updateWishlists;
-            
+
             $(document).ready(function () {
 
                 var uri = window.location.search;
@@ -44,7 +44,7 @@ and open the template in the editor.
                         container.html("Hey " + data.data.first_name);
                     });
 
-                    updateWishlists = function(data) {
+                    updateWishlists = function (data) {
                         $.getJSON('v1/wishlists/' + params[1], function (data) {
 //                        console.log(data);
                             var container = $('#wishlists');
@@ -117,6 +117,7 @@ and open the template in the editor.
                                     contentType: "application/json",
                                     data: new_theme_json,
                                     success: function (data) {
+                                        console.log('KIND OF SUCCESS');
                                         updateWishlists();
                                     },
                                     error: function () {

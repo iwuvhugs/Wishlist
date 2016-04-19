@@ -74,8 +74,8 @@ public class WishlistController {
                     productBuilder.add("description", pRs.getString("PRODUCT.description"));
                     productBuilder.add("price", pRs.getDouble("PRODUCT.price"));
                     productBuilder.add("link", pRs.getString("PRODUCT.link"));
-                    productBuilder.add("reserved", pRs.getBoolean("PRODUCT_LIST.reserved"));
-                    productBuilder.add("purchased", pRs.getInt("PRODUCT_LIST.purchased"));
+                    productBuilder.add("reserved", pRs.getString("PRODUCT_LIST.reserved"));
+                    productBuilder.add("purchased", pRs.getString("PRODUCT_LIST.purchased"));
 
                     prodArrayBuilder.add(productBuilder);
                 }
@@ -139,8 +139,8 @@ public class WishlistController {
                     productBuilder.add("description", pRs.getString("PRODUCT.description"));
                     productBuilder.add("price", pRs.getDouble("PRODUCT.price"));
                     productBuilder.add("link", pRs.getString("PRODUCT.link"));
-                    productBuilder.add("reserved", pRs.getBoolean("PRODUCT_LIST.reserved"));
-                    productBuilder.add("purchased", pRs.getInt("PRODUCT_LIST.purchased"));
+                    productBuilder.add("reserved", pRs.getString("PRODUCT_LIST.reserved"));
+                    productBuilder.add("purchased", pRs.getString("PRODUCT_LIST.purchased"));
 
                     prodArrayBuilder.add(productBuilder);
                 }
@@ -228,7 +228,12 @@ public class WishlistController {
                 innerBuilder.add("id_product", rs.getInt(2));
                 innerBuilder.add("product_name", rs.getString(3));
                 innerBuilder.add("description", rs.getString(4));
-                innerBuilder.add("price", rs.getString(5));
+                String price = rs.getString(5);
+                if (price == null) {
+                    innerBuilder.add("price", 0);
+                } else {
+                    innerBuilder.add("price", Double.parseDouble(price));
+                }
                 innerBuilder.add("link", rs.getString(6));
                 innerBuilder.add("reserved", rs.getString(7));
                 innerBuilder.add("purchased", rs.getString(8));
@@ -246,5 +251,53 @@ public class WishlistController {
         JsonObject object = builder.build();
         return object;
 
+    }
+
+    public JsonObject addNewProductToWishlist(JsonObject json) {
+        System.out.println(json);
+        JsonObjectBuilder builder = Json.createObjectBuilder();
+        Connection conn;
+        try {
+            conn = DBUtil.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(
+                    "INSERT INTO PRODUCT (PRODUCT.product_name, PRODUCT.description, PRODUCT.price, PRODUCT.link) "
+                    + "VALUES (?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+
+            pstmt.setString(1, json.getString("product_name"));
+            pstmt.setString(2, json.getString("description"));
+            String price = json.getString("price");
+            if (price.equals("")) {
+                pstmt.setNull(3, java.sql.Types.DECIMAL);
+            } else {
+                pstmt.setDouble(3, Double.parseDouble(price));
+            }
+
+            pstmt.setString(4, json.getString("link"));
+
+            int affectedRows = pstmt.executeUpdate();
+            if (affectedRows != 0) {
+                try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        int product_id = generatedKeys.getInt(1);
+                        int wishlist_id = Integer.parseInt(json.getString("id_wishlist"));
+                        System.out.println(product_id + " " + wishlist_id);
+
+                        PreparedStatement pstmt2 = conn.prepareStatement(
+                                "INSERT INTO PRODUCT_LIST (PRODUCT_LIST.id_product, PRODUCT_LIST.id_wishlist) "
+                                + "VALUES (?,?);", Statement.RETURN_GENERATED_KEYS);
+                        pstmt2.setInt(1, product_id);
+                        pstmt2.setInt(2, wishlist_id);
+                        pstmt2.executeUpdate();
+                    }
+                }
+            }
+            builder.add("success", true);
+        } catch (SQLException ex) {
+            Logger.getLogger(WishlistController.class.getName()).log(Level.SEVERE, null, ex);
+            builder.add("success", false);
+        }
+
+        JsonObject object = builder.build();
+        return object;
     }
 }

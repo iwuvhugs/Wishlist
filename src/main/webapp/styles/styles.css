@@ -43,3 +43,10 @@ footer p {
     color: #000;
     text-decoration: none;
 }
+
+.vcenter {
+    display: inline-block;
+    vertical-align: middle;
+    float: none;
+    /*padding: 0;*/
+}

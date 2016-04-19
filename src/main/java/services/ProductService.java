@@ -17,10 +17,14 @@
 package services;
 
 import controller.WishlistController;
+import java.io.StringReader;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.json.Json;
 import javax.json.JsonObject;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -48,6 +52,28 @@ public class ProductService {
         } else {
             return Response.status(404).entity("Error").build();
         }
+    }
+    
+        /**
+     *
+     * @param str
+     * @return JSON array of all messages
+     */
+    @POST
+    @Consumes("application/json")
+    @Produces("application/json")
+    public Response add(String str) {
+        JsonObject json = Json.createReader(new StringReader(str)).readObject();
+   
+        JsonObject object = controller.addNewProductToWishlist(json);
+        if (object.getBoolean("success")) {
+            System.out.println("OK");
+            return Response.ok(object).build();
+        } else {
+            System.out.println("NOT OK");
+            return Response.status(404).entity("Error").build();
+        }
+
     }
 
 }

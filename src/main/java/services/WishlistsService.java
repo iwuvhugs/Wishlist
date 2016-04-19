@@ -70,7 +70,7 @@ public class WishlistsService {
         if (object.getBoolean("success")) {
             return Response.ok(object).build();
         } else {
-            return Response.status(404).entity("Error by Kirill").build();
+            return Response.status(404).entity("Error").build();
         }
 
     }

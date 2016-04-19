@@ -27,16 +27,89 @@ and open the template in the editor.
             $(document).ready(function () {
 
                 var uri = window.location.search;
-                var theme_id;
                 var params = uri.substring(1, uri.length).split("=");
+//                var left = params[0];
+//                var right = params[1];
+//                var w_id = params[0];
+//                var u_id = right.split("=");
+
 
                 if (params[0] === "id") {
-                    
-                    var container = $('#wishlist');
-                    container.html("Wishlist #" + params[1]);
 
-                    $.getJSON('v1/products/' + params[1], function (out) {
-                        console.log(out);
+                    var header = $('#wishlist');
+                    header.html("Wishlist #" + params[1]);
+
+                    updateProductList = function (data) {
+
+
+                        $.getJSON('v1/products/' + params[1], function (data) {
+                            console.log(data);
+
+                            var container = $('#product_list');
+                            container.empty()
+                            $.each(data, function (key, object) {
+
+                                var wItem = $('<li class="list-group-item"></li>');
+                                var wItemContainer = $('<div class="row"></div>');
+
+                                var wCol1 = $('<div class="col-xs-7 vcenter"></div>');
+                                var wCol1H5 = $('<h5></h5>');
+                                var wCol1P = $('<p></p>');
+
+                                var wCol2 = $('<div class="col-xs-4 vcenter"></div>');
+                                var wCol2p1 = $('<p></p>');
+                                var wCol2p2 = $('<p></p>');
+
+                                wCol1H5.html(object.product_name);
+                                wCol1P.html(object.description);
+
+                                wCol2p1.html("$" + object.price);
+                                wCol2p2.html(object.link);
+
+                                wCol1.append(wCol1H5);
+                                wCol1.append(wCol1P);
+
+                                wCol2.append(wCol2p1);
+                                wCol2.append(wCol2p2);
+
+                                wItemContainer.append(wCol1);
+                                wItemContainer.append(wCol2);
+                                wItem.append(wItemContainer);
+
+                                container.append(wItem);
+                            });
+                        });
+                    }
+
+                    updateProductList();
+
+                    $('#create').click(function () {
+
+                        var new_product = {
+//                            "id_user": u_id[1],
+                            "id_wishlist": params[1],
+                            "product_name": $('#p_name').val(),
+                            "description": $('#p_desc').val(),
+                            "price": $('#p_price').val(),
+                            "link": $('#p_url').val()
+                        };
+                        console.log(new_product);
+                        var new_theme_json = JSON.stringify(new_product);
+                        jQuery.ajax(
+                                {
+                                    url: "v1/products",
+                                    type: 'POST',
+                                    dataType: "json",
+                                    contentType: "application/json",
+                                    data: new_theme_json,
+                                    success: function (data) {
+                                        console.log('GOT IT');
+                                        updateProductList();
+                                    },
+                                    error: function () {
+                                    }
+                                }
+                        );
                     });
 
                 }
@@ -48,14 +121,44 @@ and open the template in the editor.
             <div class="page-header">
                 <h1 class="text-center" id="wishlist"></h1>
             </div>
-            <div class="row col-xs-6 col-xs-offset-3" id="items">
-                <ul class="list-group">
-                    <li class="list-group-item">Cras justo odio</li>
-                    <li class="list-group-item">Dapibus ac facilisis in</li>
-                    <li class="list-group-item">Morbi leo risus</li>
-                    <li class="list-group-item">Porta ac consectetur ac</li>
-                    <li class="list-group-item">Vestibulum at eros</li>
-                </ul>
+            <div class="row" id="items">
+                <div class="col-xs-6 col-xs-offset-3"> 
+                    <ul class="list-group" id="product_list">
+
+                    </ul>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-6 col-xs-offset-3">
+                    <hr>
+                </div>
+            </div>
+
+            <div class="row " id="add_new_item">
+                <div class="col-xs-6 col-xs-offset-3">
+                    <div class="form-group">
+                        <label for="p_name">Product name:</label>
+                        <input type="text" class="form-control" id="p_name" name="p_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="p_desc">Description:</label>
+                        <input type="text" class="form-control" id="p_desc" name="p_desc" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="p_price">Price (in $):</label>
+                        <input type="number" class="form-control" id="p_price" name="p_price">
+                    </div>
+                    <div class="form-group">
+                        <label for="p_url">Url:</label>
+                        <input type="url" class="form-control" id="p_url" name="p_url">
+                    </div>
+                    <div class="form-group">
+                        <button id="create" type="button" class="btn btn-default  btn-block">
+                            Add product
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
 
