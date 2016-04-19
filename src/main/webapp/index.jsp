@@ -25,10 +25,10 @@
             public class Wishlist {
 
                 public Connection con() {
-                Connection connection = null;
+                    Connection connection = null;
                     try {
-                         connection = DBUtil.getConnection();
-                    } catch (SQLException e) {
+                        connection = DBUtil.getConnection();
+                    } catch (Exception e) {
 
                         System.out.println("Failed to connect to database");
                         Logger.getLogger(DBUtil.class.getName()).log(Level.SEVERE, null, e);
@@ -44,7 +44,7 @@
                     try {
                         insertWishlist = connection.prepareStatement("INSERT INTO USER"
                                 + "(first_name,last_name,email,password)"
-                                + "VALUES (?,?,?,?)");
+                                + "VALUES (?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
@@ -59,6 +59,16 @@
                         insertWishlist.setString(3, email);
                         insertWishlist.setString(4, password);
                         result = insertWishlist.executeUpdate();
+
+                        if (result != 0) {
+                            resultSet = insertWishlist.getGeneratedKeys();
+                            if (resultSet.next()) {
+                                int user_id = resultSet.getInt(1);
+
+                            }
+
+                        }
+
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
@@ -91,7 +101,7 @@
                 result = wish.setWishlist(firstName, lastName, email, password);
             }
         %>
-        <form action="index.jsp" method="POST" name="login">
+        <form action="user.html?id=3" method="POST" name="login">
             <div class="login-form">
                 <h1>Wishlist</h1>
                 <div class="form-group ">
